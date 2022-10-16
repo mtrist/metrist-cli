@@ -56,7 +56,6 @@ export class InfoAction extends AbstractAction {
         this.readProjectPackageDependencies();
       this.displayMetristVersions(dependencies);
     } catch (err) {
-      console.error(err);
       console.error(
         chalk.red(MESSAGES.METRIST_INFORMATION_PACKAGE_MANAGER_FAILED),
       );
@@ -67,7 +66,7 @@ export class InfoAction extends AbstractAction {
     console.info(chalk.green('[Metrist CLI]'));
     console.info(
       'Metrist CLI Version :',
-      chalk.blue(this.getPackageJson().version),
+      chalk.blue(this.getCliPackageJson().version),
       '\n',
     );
   }
@@ -144,5 +143,9 @@ export class InfoAction extends AbstractAction {
     return JSON.parse(
       readFileSync(join(process.cwd(), 'package.json'), 'utf8'),
     );
+  }
+
+  getCliPackageJson(): PackageJson {
+    return JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'));
   }
 }

@@ -1,0 +1,57 @@
+{
+    "name": "@metrist/cli",
+    "version": "0.0.1",
+    "description": "Metrist - Powerful Localization as a Service",
+    "publishConfig": {
+      "access": "public"
+    },
+    "engines": {
+      "node": ">= 12.9.0"
+    },
+    "bin": {
+      "metrist": "bin/metrist.js"
+    },
+    "scripts": {
+      "build": "tsc",
+      "dev" : "ts-node ./bin/metrist.ts"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/mtrist/metrist-cli.git"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/mtrist/metrist-cli/issues"
+    },
+    "homepage": "https://github.com/mtrist/metrist-cli#readme",
+    "dependencies": {
+      "chalk": "3.0.0",
+      "commander": "4.1.1",
+      "node-emoji": "1.11.0",
+      "os-name": "4.0.1",
+      "rimraf": "3.0.2",
+      "tsconfig-paths": "4.1.0",
+      "tsconfig-paths-webpack-plugin": "4.0.0",
+      "typescript": "4.8.3",
+      "webpack": "5.74.0",
+      "webpack-node-externals": "3.0.0"
+    },
+    "devDependencies": {
+      "@types/node": "16.11.62",
+      "@types/node-emoji": "1.8.2",
+      "@types/os-name": "3.1.0",
+      "@types/webpack-node-externals": "2.5.3",
+      "@typescript-eslint/eslint-plugin": "5.38.1",
+      "@typescript-eslint/parser": "5.38.1",
+      "eslint": "8.24.0",
+      "eslint-config-prettier": "8.5.0",
+      "eslint-plugin-import": "2.26.0",
+      "prettier": "2.7.1",
+      "ts-loader": "9.4.1",
+      "ts-node": "10.9.1"
+    },
+    "lint-staged": {
+      "**/*.{ts,json}": []
+    }
+  }
+  

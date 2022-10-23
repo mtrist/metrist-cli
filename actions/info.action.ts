@@ -117,6 +117,9 @@ export class InfoAction extends AbstractAction {
   }
 
   format(dependencies: MetristDependency[]): MetristDependency[] {
+    if (!dependencies?.length) {
+      return [];
+    }
     const sorted = dependencies.sort(
       (dependencyA, dependencyB) =>
         dependencyB.name.length - dependencyA.name.length,

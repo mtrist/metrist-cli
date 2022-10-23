@@ -35,7 +35,7 @@ export class InfoAction extends AbstractAction {
   }
 
   private displayBanner() {
-    console.info(chalk.red(BANNER));
+    console.info(chalk.green(BANNER));
   }
 
   private async displaySystemInformation(): Promise<void> {

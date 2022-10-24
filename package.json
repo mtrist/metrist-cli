@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node ./bin/metrist.ts",
-    "watch-build": "nodemon --exec yarn build"
+    "dev:build": "nodemon --exec yarn build"
   },
   "repository": {
     "type": "git",

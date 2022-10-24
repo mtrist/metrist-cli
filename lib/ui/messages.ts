@@ -30,4 +30,5 @@ export const MESSAGES = {
     `Unable to install library ${name} because package did not install. Please check package name.`,
   LIBRARY_INSTALLATION_FAILED_NO_LIBRARY: 'No library found.',
   LIBRARY_INSTALLATION_STARTS: 'Starting library setup...',
+  RC_FILE_NOT_FOUND: 'No .metristrc file found.',
 };

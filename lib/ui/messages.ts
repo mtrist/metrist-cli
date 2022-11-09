@@ -31,4 +31,5 @@ export const MESSAGES = {
   LIBRARY_INSTALLATION_FAILED_NO_LIBRARY: 'No library found.',
   LIBRARY_INSTALLATION_STARTS: 'Starting library setup...',
   RC_FILE_NOT_FOUND: 'No .metristrc file found.',
+  COULD_NOT_READ_ENV_FILE: 'Could not read .env file',
 };

@@ -6,7 +6,7 @@ import { MESSAGES } from '../lib/ui';
 import { RcFile } from '../interfaces/rc.interface';
 import { readEnv } from '../lib/env/readEnv';
 import { exec } from 'js-exec';
-import { transform } from '@babel/core';
+// import { transform } from '@babel/core';
 import env from 'babel-preset-env';
 
 export class SyncAction extends AbstractAction {
@@ -20,6 +20,10 @@ export class SyncAction extends AbstractAction {
         );
         let value: any;
         const setValue = (val: any) => (value = val);
+
+        const packageName = '@babel/core';
+
+        const { transform } = require(packageName);
 
         transform(
           content,

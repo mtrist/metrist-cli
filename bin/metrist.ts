@@ -11,7 +11,7 @@ const bootstrap = () => {
   const program: CommanderStatic = commander;
   program
     .version(
-      require('../../package.json').version,
+      require('../package.json').version,
       '-v, --version',
       'Output the current version.',
     )

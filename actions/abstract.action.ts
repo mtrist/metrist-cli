@@ -1,9 +1,8 @@
-import { Input } from '../commands';
+export type AbstractActionPrams = {
+  input?: string | boolean;
+  options?: Record<string, any>;
+};
 
 export abstract class AbstractAction {
-  public abstract handle(
-    inputs?: Input[],
-    options?: Input[],
-    extraFlags?: string[],
-  ): Promise<void>;
+  public abstract handle(params?: AbstractActionPrams): Promise<void>;
 }

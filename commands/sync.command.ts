@@ -1,4 +1,5 @@
-import { CommanderStatic } from 'commander';
+import { CommanderStatic, Command } from 'commander';
+import commander = require('commander');
 import { AbstractCommand } from './abstract.command';
 
 export class SyncCommand extends AbstractCommand {
@@ -7,9 +8,20 @@ export class SyncCommand extends AbstractCommand {
       .command('sync')
       .alias('s')
       .description('Syncs phrases with remote')
-      .option('-p, --project [project]', 'Project in which to generate files.')
-      .action(async () => {
-        await this.action.handle();
+      .option('-r, --resolve [path]', 'Resolve path for the JSON files.')
+      .option('-f, --fetcher [command]', 'Fetcher command for the project.')
+      .action(async (input: string, command: Command) => {
+        const options = [
+          {
+            name: 'path',
+            value: command.resolve,
+          },
+          {
+            name: 'fetcher',
+            value: command.fetcher,
+          },
+        ];
+        await this.action.handle({});
       });
   }
 }

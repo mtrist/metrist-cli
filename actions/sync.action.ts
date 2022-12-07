@@ -1,64 +1,47 @@
 import * as chalk from 'chalk';
-import { readFileSync, promises } from 'fs';
+import { existsSync, promises } from 'fs';
 import { join } from 'path';
 import { AbstractAction } from './abstract.action';
 import { MESSAGES } from '../lib/ui';
 import { RcFile } from '../interfaces/rc.interface';
-import { readEnv } from '../lib/env/readEnv';
-import { exec } from 'js-exec';
-// import { transform } from '@babel/core';
-import env from 'babel-preset-env';
+import { runFetcher } from '../lib/run-fetcher';
+import { ParseFetcherException } from '../errors/parse-fetcher.error';
+
+export interface SyncParams {
+  fetcher?: string;
+  resolve?: string;
+}
 
 export class SyncAction extends AbstractAction {
-  public async handle() {
+  public async handle({ options }) {
     try {
-      const rcFile = this.getRCFile();
-      if (rcFile.fetcher) {
-        const content = await promises.readFile(
-          join(process.cwd(), rcFile.fetcher),
-          'utf8',
-        );
-        let value: any;
-        const setValue = (val: any) => (value = val);
-
-        const packageName = '@babel/core';
-
-        const { transform } = require(packageName);
-
-        transform(
-          content,
-          {
-            presets: [env],
-          },
-          (err: Error, results: { code: string }) => {
-            // console.log(results.code);
-            exec(results.code, {
-              onSuccess: () => {
-                console.log('the code said: ', value);
-              },
-              onError: (error) => {
-                console.log('error');
-                console.error(error);
-              },
-            })({
-              console,
-              setContent: setValue,
-            });
-          },
-        );
-      }
+      const { fetcher, resolve } = await this.resolveOptions(options);
+      const output = await runFetcher(fetcher);
+      console.log(output);
     } catch (e) {
       console.log(e);
+      if (e instanceof ParseFetcherException) {
+      }
+
       console.error(chalk.red(MESSAGES.RC_FILE_NOT_FOUND));
     }
   }
 
-  getResolvePath(): string | void {
-    const rc = this.getRCFile();
-    return rc.resolvePath;
+  async resolveOptions(options) {
+    const rc = await this.getRCFile();
+    const fetcherOption = options.find((item) => (item.name = 'fetcher'));
+    const resolveOption = options.find((item) => (item.name = 'resolve'));
+    return {
+      fetcher: fetcherOption?.value ?? rc.fetcher,
+      resolve: resolveOption?.value ?? rc.resolve,
+    };
   }
 
-  getRCFile(): RcFile {
-    return JSON.parse(readFileSync(join(process.cwd(), '.metristrc'), 'utf8'));
+  async getRCFile(): Promise<RcFile> {
+    const rcPath = join(process.cwd(), '.metristrc');
+    if (existsSync(rcPath)) {
+      return JSON.parse(await promises.readFile(rcPath, 'utf8'));
+    }
+    return;
   }
 }

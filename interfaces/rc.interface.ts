@@ -1,4 +1,4 @@
 export interface RcFile {
-  resolvePath?: string;
+  resolve?: string;
   fetcher?: string;
 }

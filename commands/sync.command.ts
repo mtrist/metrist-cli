@@ -11,17 +11,7 @@ export class SyncCommand extends AbstractCommand {
       .option('-r, --resolve [path]', 'Resolve path for the JSON files.')
       .option('-f, --fetcher [command]', 'Fetcher command for the project.')
       .action(async (input: string, command: Command) => {
-        const options = [
-          {
-            name: 'path',
-            value: command.resolve,
-          },
-          {
-            name: 'fetcher',
-            value: command.fetcher,
-          },
-        ];
-        await this.action.handle({});
+        await this.action.handle({ options: command?.option });
       });
   }
 }

@@ -29,8 +29,10 @@ export class SyncAction extends AbstractAction {
 
   async resolveOptions(options) {
     const rc = await this.getRCFile();
-    const fetcherOption = options.find((item) => (item.name = 'fetcher'));
-    const resolveOption = options.find((item) => (item.name = 'resolve'));
+    const fetcherOption =
+      options && options.find((item) => (item.name = 'fetcher'));
+    const resolveOption =
+      options && options.find((item) => (item.name = 'resolve'));
     return {
       fetcher: fetcherOption?.value ?? rc.fetcher,
       resolve: resolveOption?.value ?? rc.resolve,

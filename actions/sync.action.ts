@@ -5,25 +5,19 @@ import { AbstractAction } from './abstract.action';
 import { MESSAGES } from '../lib/ui';
 import { RcFile } from '../interfaces/rc.interface';
 import { runFetcher } from '../lib/run-fetcher';
-import { ParseFetcherException } from '../errors/parse-fetcher.error';
-
-export interface SyncParams {
-  fetcher?: string;
-  resolve?: string;
-}
+import { BaseException } from '../errors/base.exception';
 
 export class SyncAction extends AbstractAction {
   public async handle({ options }) {
     try {
       const { fetcher, resolve } = await this.resolveOptions(options);
       const output = await runFetcher(fetcher);
-      console.log(output);
     } catch (e) {
-      console.log(e);
-      if (e instanceof ParseFetcherException) {
+      if (e instanceof BaseException) {
+        console.error(chalk.red(e.getMessage));
+      } else {
+        throw e;
       }
-
-      console.error(chalk.red(MESSAGES.RC_FILE_NOT_FOUND));
     }
   }
 
@@ -35,7 +29,7 @@ export class SyncAction extends AbstractAction {
       options && options.find((item) => (item.name = 'resolve'));
     return {
       fetcher: fetcherOption?.value ?? rc.fetcher,
-      resolve: resolveOption?.value ?? rc.resolve,
+      resolve: resolveOption?.value ?? rc.resolvePath,
     };
   }
 

@@ -1,13 +1,33 @@
 import axios from 'axios';
 
-export const getRepositoryData = async (url: string) => {
-  const [, user, repo] =
-    url.match(/https:\/\/github.com\/([^/]+)\/([^/]+)/) || [];
+interface GithubRepository {
+  org: string;
+  repo: string;
+  baseUrl?: string;
+  token?: string;
+}
 
-  // make an API call to GitHub to get the repository data
-  const { data } = await axios.get(
-    `https://api.github.com/repos/${user}/${repo}`,
-  );
+const getAxiosClient = ({ baseUrl, org, repo, token }: GithubRepository) => {
+  return axios.create({
+    baseURL: `${baseUrl}/repos/${org}/${repo}`,
+    ...(token
+      ? {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      : {}),
+  });
+};
+
+export const getRepositoryData = async ({
+  baseUrl = 'https://api.github.com',
+  ...rest
+}: GithubRepository) => {
+  const axiosClient = getAxiosClient({ baseUrl, ...rest });
+  const { data } = await axiosClient.get('/contents');
+
+  console.log(data);
 
   // create an object to store the data for each language
   const languageData = {};

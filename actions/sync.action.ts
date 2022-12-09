@@ -8,11 +8,18 @@ import { runFetcher } from '../lib/run-fetcher';
 import { BaseException } from '../errors/base.exception';
 import { getRepositoryData } from '../fetchers/github/github';
 
-const url = 'https://github.com/parsasi/locals-test';
-
+const repo = 'i18-test'; //'locals-test';
+const org = 'parsasi';
+const token = '';
 export class SyncAction extends AbstractAction {
   public async handle({ options }) {
-    console.log(await getRepositoryData(url));
+    // console.log(
+    //   await getRepositoryData({
+    //     org,
+    //     token,
+    //     repo,
+    //   }),
+    // );
     try {
       const { fetcher, resolve } = await this.resolveOptions(options);
       const output = await runFetcher(fetcher);

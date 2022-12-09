@@ -6,9 +6,13 @@ import { MESSAGES } from '../lib/ui';
 import { RcFile } from '../interfaces/rc.interface';
 import { runFetcher } from '../lib/run-fetcher';
 import { BaseException } from '../errors/base.exception';
+import { getRepositoryData } from '../fetchers/github/github';
+
+const url = 'https://github.com/parsasi/locals-test';
 
 export class SyncAction extends AbstractAction {
   public async handle({ options }) {
+    console.log(await getRepositoryData(url));
     try {
       const { fetcher, resolve } = await this.resolveOptions(options);
       const output = await runFetcher(fetcher);

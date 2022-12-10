@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { languages } from '../../constants/languages.constant';
+
 
 interface GithubRepository {
   org: string;
@@ -25,21 +27,24 @@ export const getRepositoryData = async ({
   ...rest
 }: GithubRepository) => {
   const axiosClient = getAxiosClient({ baseUrl, ...rest });
-  const { data } = await axiosClient.get('/contents');
+  const { data: repository } = await axiosClient.get('/contents');  
 
-  console.log(data);
+  const directories = repository.data.filter((item) => item.type === 'dir');
 
   // create an object to store the data for each language
   const languageData = {};
 
   // iterate over the repository's directories and get the language code and files in each language directory
-  for (const directory of data.directories) {
-    const [, languageCode] = directory.name.match(/^([^/]+)\//) || [];
+  for (const directory of directories) {
+    const languageCode = directory.name;
 
-    if (!languageCode) continue;
+    const directoryFiles = await 
+
+    if (!languages[languageCode]) continue;
 
     // create an inner object for each language to store the filenames and parsed JSON values
     languageData[languageCode] = {};
+    
 
     // iterate over the files in the language directory and parse the JSON data
     for (const file of directory.files) {

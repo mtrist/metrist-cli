@@ -7,9 +7,7 @@ const doesEnvFileExist = (envPath: string) => {
   return existsSync(envPath);
 };
 
-export const readEnv = async (
-  envPath: string = join(process.cwd(), '.env'),
-) => {
+export const readEnv = async (envPath = join(process.cwd(), '.env')) => {
   let finalEnv = process.env;
   if (doesEnvFileExist(envPath)) {
     try {

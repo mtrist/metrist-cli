@@ -4,7 +4,7 @@ import { join } from 'path';
 import { AbstractAction } from './abstract.action';
 import { RcFile } from '../interfaces/rc.interface';
 import { runFetcher } from '../lib/run-fetcher';
-import { BaseException } from '../errors/base.exception';
+import { BaseException } from '../exceptions/base.exception';
 
 export class SyncAction extends AbstractAction {
   public async handle({ options }) {

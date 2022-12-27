@@ -26,28 +26,37 @@ export const github = async ({
   baseUrl = 'https://api.github.com',
   ...rest
 }: GithubRepository): Promise<LanguageDictionary | never> => {
-  const axiosClient = getAxiosClient({ baseUrl, ...rest });
-  const { data: repository } = await axiosClient.get('/contents');
+  try {
+    const axiosClient = getAxiosClient({ baseUrl, ...rest });
 
-  const directories = repository.data.filter((item) => item.type === 'dir');
+    const { data: repository } = await axiosClient.get('/contents');
+
+    const directories = repository.data.filter((item) => item.type === 'dir');
+
+    console.log(repository);
+  } catch (e) {
+    console.log(e.message);
+  }
+
+  // console.log(directories);
 
   const languageData = {};
 
-  for (const directory of directories) {
-    const languageCode = directory.name;
+  // for (const directory of directories) {
+  //   const languageCode = directory.name;
 
-    if (!languages[languageCode]) {
-      continue;
-    }
+  //   if (!languages[languageCode]) {
+  //     continue;
+  //   }
 
-    languageData[languageCode] = {};
+  //   languageData[languageCode] = {};
 
-    for (const file of directory.files) {
-      const { data: json } = await axios.get(file.url);
+  //   for (const file of directory.files) {
+  //     const { data: json } = await axios.get(file.url);
 
-      languageData[languageCode][file.name] = json;
-    }
-  }
+  //     languageData[languageCode][file.name] = json;
+  //   }
+  // }
 
   return languageData;
 };

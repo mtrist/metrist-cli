@@ -31,7 +31,7 @@ export const github = async ({
 
     const { data: repository } = await axiosClient.get('/contents');
 
-    const directories = repository.data.filter((item) => item.type === 'dir');
+    // const directories = repository.data.filter((item) => item.type === 'dir');
 
     console.log(repository);
   } catch (e) {

@@ -14,7 +14,7 @@ export const runFetcher = async (
 ): Promise<LanguageDictionary | never> => {
   if (builtInFetchers[fetcher]) {
     try {
-      const fetcherParamsWithResolvedEnv = resolveFetcherParamsWithEnv(
+      const fetcherParamsWithResolvedEnv = await resolveFetcherParamsWithEnv(
         fetcherParams,
         envPath,
       );

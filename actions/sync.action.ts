@@ -1,10 +1,11 @@
-import * as chalk from 'chalk';
 import { existsSync, promises } from 'fs';
 import { join } from 'path';
-import { AbstractAction } from './abstract.action';
-import { RcFile } from '../interfaces/rc.interface';
+import * as chalk from 'chalk';
 import { runFetcher } from '../lib/run-fetcher';
+import { createDictionaryFiles } from '../lib/utils/create-dictionary-files';
+import { AbstractAction } from './abstract.action';
 import { BaseException } from '../exceptions/base.exception';
+import type { RcFile } from '../interfaces/rc.interface';
 
 export class SyncAction extends AbstractAction {
   public async handle({ options }) {
@@ -12,6 +13,7 @@ export class SyncAction extends AbstractAction {
       const { fetcher, resolve, fetcherParams, envPath } =
         await this.resolveOptions(options);
       const output = await runFetcher(fetcher, fetcherParams, envPath);
+      await createDictionaryFiles(resolve, output);
     } catch (e) {
       if (e instanceof BaseException) {
         console.error(chalk.red(e.getMessage));

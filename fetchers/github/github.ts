@@ -1,6 +1,9 @@
-import axios from 'axios';
-import { languages } from '../../constants/languages.constant';
+import axios, { AxiosInstance } from 'axios';
 import type { LanguageDictionary } from '../../interfaces/phrase.interface';
+
+type CipherTree = {
+  [key: string]: CipherTree | any;
+};
 
 interface GithubRepository {
   org: string;
@@ -22,6 +25,28 @@ const getAxiosClient = ({ baseUrl, org, repo, token }: GithubRepository) => {
   });
 };
 
+const cipherRepository = async (repositoryClient: AxiosInstance, path = '') => {
+  const cipherTree: CipherTree = {};
+
+  const { data: repository } = await repositoryClient.get(`${path}`);
+
+  for (const item of repository) {
+    if (item.type === 'dir') {
+      cipherTree[item.name] = await cipherRepository(
+        repositoryClient,
+        `${path}/${item.path}`,
+      );
+    } else if (item.type === 'file' && item.name.endsWith('.json')) {
+      const { data: fileContent } = await axios.get(item.download_url, {
+        responseType: 'text',
+      });
+      cipherTree[item.name] = JSON.parse(fileContent);
+    }
+  }
+
+  return cipherTree;
+};
+
 export const github = async ({
   baseUrl = 'https://api.github.com',
   ...rest
@@ -29,34 +54,8 @@ export const github = async ({
   try {
     const axiosClient = getAxiosClient({ baseUrl, ...rest });
 
-    const { data: repository } = await axiosClient.get('/contents');
-
-    // const directories = repository.data.filter((item) => item.type === 'dir');
-
-    console.log(repository);
+    return await cipherRepository(axiosClient, '/contents');
   } catch (e) {
-    console.log(e.message);
+    throw e;
   }
-
-  // console.log(directories);
-
-  const languageData = {};
-
-  // for (const directory of directories) {
-  //   const languageCode = directory.name;
-
-  //   if (!languages[languageCode]) {
-  //     continue;
-  //   }
-
-  //   languageData[languageCode] = {};
-
-  //   for (const file of directory.files) {
-  //     const { data: json } = await axios.get(file.url);
-
-  //     languageData[languageCode][file.name] = json;
-  //   }
-  // }
-
-  return languageData;
 };

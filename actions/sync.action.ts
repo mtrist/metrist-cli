@@ -2,7 +2,7 @@ import { existsSync, promises } from 'fs';
 import { join } from 'path';
 import * as chalk from 'chalk';
 import { runFetcher } from '../lib/run-fetcher';
-import { createDictionaryFiles } from '../lib/utils/create-dictionary-files';
+import { createDictionaryFiles } from '../lib/utils/file-system/create-dictionary-files';
 import { AbstractAction } from './abstract.action';
 import { BaseException } from '../exceptions/base.exception';
 import type { RcFile } from '../interfaces/rc.interface';

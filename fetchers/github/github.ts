@@ -25,6 +25,11 @@ const getAxiosClient = ({ baseUrl, org, repo, token }: GithubRepository) => {
   });
 };
 
+const removeFileExtension = (fileName: string) => {
+  const lastDot = fileName.lastIndexOf('.');
+  return lastDot > -1 ? fileName.slice(0, lastDot) : fileName;
+};
+
 const cipherRepository = async (repositoryClient: AxiosInstance, path = '') => {
   const cipherTree: CipherTree = {};
 
@@ -40,7 +45,8 @@ const cipherRepository = async (repositoryClient: AxiosInstance, path = '') => {
       const { data: fileContent } = await axios.get(item.download_url, {
         responseType: 'text',
       });
-      cipherTree[item.name] = JSON.parse(fileContent);
+      const nameWithoutExtension = removeFileExtension(item.name);
+      cipherTree[nameWithoutExtension] = JSON.parse(fileContent);
     }
   }
 

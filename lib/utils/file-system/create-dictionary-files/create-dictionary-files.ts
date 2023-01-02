@@ -1,7 +1,8 @@
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, lstat } from 'fs/promises';
 import * as path from 'path';
-import { FileCreationException } from '../../../exceptions/file-creation.exception';
-import type { LanguageDictionary } from '../../../interfaces/phrase.interface';
+import { checkPathExists } from '../check-path-exists';
+import { FileCreationException } from '../../../../exceptions/file-creation.exception';
+import type { LanguageDictionary } from '../../../../interfaces/phrase.interface';
 
 export const createDictionaryFiles = async (
   baseUrl: string,
@@ -9,9 +10,11 @@ export const createDictionaryFiles = async (
 ) => {
   for (const [languageCode, language] of Object.entries(dict)) {
     // Create a directory for each language
-    const languageDir = path.join(baseUrl, languageCode);
-    await mkdir(languageDir);
+    const languageDir = path.join(process.cwd(), baseUrl, languageCode);
 
+    if (!(await checkPathExists(languageDir))) {
+      await mkdir(languageDir, { recursive: true });
+    }
     for (const [namespace, content] of Object.entries(language)) {
       const filePath = path.join(languageDir, `${namespace}.json`);
       try {

@@ -13,11 +13,11 @@ export const runFetcher = async (
   envPath?: RcFile['envPath'],
 ): Promise<LanguageDictionary | never> => {
   if (builtInFetchers[fetcher]) {
+    const fetcherParamsWithResolvedEnv = await resolveFetcherParamsWithEnv(
+      fetcherParams,
+      envPath,
+    );
     try {
-      const fetcherParamsWithResolvedEnv = await resolveFetcherParamsWithEnv(
-        fetcherParams,
-        envPath,
-      );
       return builtInFetchers[fetcher](fetcherParamsWithResolvedEnv);
     } catch (e) {
       throw new InternalFetcherException(e.message);

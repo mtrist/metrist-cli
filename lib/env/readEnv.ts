@@ -1,6 +1,7 @@
 import { promises as fs, existsSync } from 'fs';
 import { MESSAGES } from '../ui/messages';
 import { join } from 'path';
+import { ReadEnvException } from '../../exceptions/read-env.exception';
 import * as dotenv from 'dotenv';
 
 const doesEnvFileExist = (envPath: string) => {
@@ -13,10 +14,9 @@ export const readEnv = async (envPath = join(process.cwd(), '.env')) => {
     try {
       const envFileBuffer = await fs.readFile(envPath);
       const envFileContent = dotenv.parse(envFileBuffer);
-
       finalEnv = { ...finalEnv, ...envFileContent };
     } catch (error) {
-      console.error(MESSAGES.COULD_NOT_READ_ENV_FILE);
+      throw new ReadEnvException();
     }
   }
   return finalEnv;

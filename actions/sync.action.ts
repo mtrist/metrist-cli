@@ -16,7 +16,7 @@ export class SyncAction extends AbstractAction {
       await createDictionaryFiles(resolve, output);
     } catch (e) {
       if (e instanceof BaseException) {
-        console.error(chalk.red(e.getMessage));
+        console.error(chalk.red(e.getMessage()));
       } else {
         throw e;
       }
